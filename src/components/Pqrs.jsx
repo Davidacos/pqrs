@@ -12,12 +12,13 @@ const PQRSPage = () => {
     const fetchPQRS = async () => {
       try {
         const response = await fetch(apiUrl);
-        const data = await response.json();
+        const result = await response.json();
 
-        if (Array.isArray(data)) {
-          setPqrsData(data);
+        // ✅ ACCEDEMOS A result.data
+        if (Array.isArray(result.data)) {
+          setPqrsData(result.data);
         } else {
-          setError("Los datos recibidos no tienen el formato esperado.");
+          setError("La respuesta del servidor no contiene un arreglo válido.");
         }
       } catch (err) {
         console.error("Error al cargar PQRS:", err);
@@ -33,7 +34,9 @@ const PQRSPage = () => {
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-6xl bg-white rounded shadow-md p-6 overflow-x-auto">
-        <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">📋 Tabla de PQRS</h1>
+        <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">
+          📋 Tabla de PQRS
+        </h1>
 
         {loading ? (
           <div className="flex justify-center items-center py-12 text-blue-600">
@@ -43,7 +46,9 @@ const PQRSPage = () => {
         ) : error ? (
           <p className="text-center text-red-500">{error}</p>
         ) : pqrsData.length === 0 ? (
-          <p className="text-center text-gray-500">No hay registros disponibles.</p>
+          <p className="text-center text-gray-500">
+            No hay registros disponibles.
+          </p>
         ) : (
           <table className="min-w-full divide-y divide-gray-300 text-sm">
             <thead className="bg-gray-100 text-gray-700">
