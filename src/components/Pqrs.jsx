@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { FaEye, FaFilePdf, FaSpinner } from "react-icons/fa";
+import { FaSpinner } from "react-icons/fa";
 
 const PQRSPage = () => {
   const [pqrsData, setPqrsData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // 🔁 Cambia esta URL por tu API real
-  const apiUrl = "https://tuservidor.com/api/pqrs";
+  const apiUrl = "http://localhost:4000/Api/PQRs";
 
   useEffect(() => {
     const fetchPQRS = async () => {
@@ -18,11 +17,11 @@ const PQRSPage = () => {
         if (Array.isArray(data)) {
           setPqrsData(data);
         } else {
-          setError("El formato de los datos no es válido.");
+          setError("Los datos recibidos no tienen el formato esperado.");
         }
       } catch (err) {
         console.error("Error al cargar PQRS:", err);
-        setError("No se pudieron obtener los datos del servidor.");
+        setError("No se pudo conectar con el servidor.");
       } finally {
         setLoading(false);
       }
@@ -51,39 +50,26 @@ const PQRSPage = () => {
               <tr>
                 <th className="px-4 py-2">#</th>
                 <th className="px-4 py-2">Nombre</th>
-                <th className="px-4 py-2">Cédula</th>
+                <th className="px-4 py-2">Correo</th>
+                <th className="px-4 py-2">Teléfono</th>
                 <th className="px-4 py-2">Tipo</th>
-                <th className="px-4 py-2">Ciudad</th>
+                <th className="px-4 py-2">Motivo</th>
+                <th className="px-4 py-2">Canal</th>
                 <th className="px-4 py-2">Fecha</th>
-                <th className="px-4 py-2">Acciones</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
               {pqrsData.map((item, index) => (
                 <tr key={item.id || index} className="hover:bg-gray-50">
                   <td className="px-4 py-2">{index + 1}</td>
-                  <td className="px-4 py-2">{item.fullName || item.nombre}</td>
-                  <td className="px-4 py-2">{item.documentNumber}</td>
+                  <td className="px-4 py-2">{item.name}</td>
+                  <td className="px-4 py-2">{item.email}</td>
+                  <td className="px-4 py-2">{item.phone}</td>
                   <td className="px-4 py-2 capitalize">{item.requestType}</td>
-                  <td className="px-4 py-2">{item.city}</td>
-                  <td className="px-4 py-2">{new Date(item.createdAt).toLocaleDateString()}</td>
-                  <td className="px-4 py-2 flex space-x-2">
-                    <button
-                      className="text-blue-500 hover:text-blue-700"
-                      onClick={() => console.log("Ver detalle:", item)}
-                    >
-                      <FaEye />
-                    </button>
-                    {item.attachment && (
-                      <a
-                        href={item.attachment}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-red-500 hover:text-red-700"
-                      >
-                        <FaFilePdf />
-                      </a>
-                    )}
+                  <td className="px-4 py-2">{item.reason}</td>
+                  <td className="px-4 py-2">{item.submissionChannel}</td>
+                  <td className="px-4 py-2">
+                    {new Date(item.fecha_registro).toLocaleDateString()}
                   </td>
                 </tr>
               ))}
